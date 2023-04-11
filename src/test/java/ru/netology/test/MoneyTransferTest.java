@@ -6,10 +6,9 @@ import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
 import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
-
 import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static ru.netology.data.DataHelper.*;
 
 public class MoneyTransferTest {
     LoginPage loginPage;
@@ -27,11 +26,11 @@ public class MoneyTransferTest {
 
     @Test
     void shouldTransferFromFirstToSecond() {
-        var firstCardInfo = DataHelper.getFirstCardInfo();
-        var secondCardInfo = DataHelper.getSecondCardInfo();
+        var firstCardInfo = getFirstCardInfo();
+        var secondCardInfo = getSecondCardInfo();
         var firstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
         var secondCardBalance = dashboardPage.getCardBalance(secondCardInfo);
-        var amount = DataHelper.generateValidAmount(firstCardBalance);
+        var amount = generateValidAmount(firstCardBalance);
         var expectedBalanceFirstCard = firstCardBalance - amount;
         var expectedBalanceSecondCard = secondCardBalance + amount;
         var transferPage = dashboardPage.selectCardToTransfer(secondCardInfo);
@@ -44,11 +43,11 @@ public class MoneyTransferTest {
 
     @Test
     void shouldGetErrorMessageIfAmountMoreBalance() {
-        var firstCardInfo = DataHelper.getFirstCardInfo();
-        var secondCardInfo = DataHelper.getSecondCardInfo();
+        var firstCardInfo = getFirstCardInfo();
+        var secondCardInfo = getSecondCardInfo();
         var firstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
         var secondCardBalance = dashboardPage.getCardBalance(secondCardInfo);
-        var amount = DataHelper.generateInvalidAmount(secondCardBalance);
+        var amount = generateInvalidAmount(secondCardBalance);
         var transferPage = dashboardPage.selectCardToTransfer(secondCardInfo);
         transferPage.makeTransfer(String.valueOf(amount), secondCardInfo);
         transferPage.findErrorMessage("Выполнена попытка перевода суммы, превышающий остаток на карте списания");
